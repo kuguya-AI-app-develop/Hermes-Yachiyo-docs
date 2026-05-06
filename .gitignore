@@ -1,0 +1,13 @@
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+node_modules/
+apps/frontend/node_modules/
+apps/frontend/dist/
+apps/frontend/dist-electron/
+dist/
+build/
+hermes_yachiyo.egg-info/
+memory/
+tests/

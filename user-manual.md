@@ -2,357 +2,221 @@
 
 适用对象：第一次安装并使用 Hermes-Yachiyo 的 macOS 用户。
 
-适用版本：`/Applications/Hermes-Yachiyo.app` 发布包，实测 Hermes Agent `0.12.0`。
+Hermes-Yachiyo 是桌面优先的本地个人 Agent 应用。它把 Hermes Agent 包装成常驻本机的桌面助手，并提供应用内一键安装、主控台、完整对话窗口、Bubble 悬浮入口、Live2D 角色入口、主动关怀、语音播报、工具中心、诊断、备份和卸载管理。
 
-本文截图来自一次隔离 HOME 的真实首用流程。截图素材已放在 `public/images/hermes-yachiyo/first-run/`，VitePress 中可直接使用 `/images/hermes-yachiyo/first-run/<文件名>.png` 引用。
+## 1. 产品结构
 
-## 1. 应用定位
+Hermes-Yachiyo 由几层能力组成：
 
-Hermes-Yachiyo 是桌面优先的本地个人 Agent 应用。它把 Hermes Agent 包装成常驻桌面助手，并提供主控台、完整对话窗口、Bubble 悬浮入口、Live2D 角色入口、主动关怀、语音播报、资源导入、工具配置、诊断、备份和卸载管理。
+- Hermes Agent：模型、工具和 agent 执行能力来源。
+- Yachiyo Desktop：Electron 桌面壳、React 界面、桌面窗口和系统入口。
+- Python Backend：管理 Hermes runtime、工作空间、本地能力和维护任务。
+- Local Bridge：默认监听 `127.0.0.1:8420`，只服务本机 UI 与授权集成。
+- 可选资源：Live2D 模型、GPT-SoVITS 语音包和本地 TTS 服务。
 
-应用本体不内置所有大资源：
+Yachiyo 不会替代 Hermes 的 agent 内核，也不会把 Hapi/Codex 任务搬进桌面壳。AstrBot 只作为可选 QQ 接入层，负责把授权请求转发到本地 Yachiyo。
 
-- Hermes Agent 会在首次使用时安装或被自动检测。
-- Live2D 模型资源需要导入 ZIP。
-- GPT-SoVITS 八千代语音包需要导入 ZIP。
-- GPT-SoVITS API 服务需要本机已有或由设置页配置启动。
+## 2. 安装与第一次打开
 
-## 2. 首次启动
+将 `Hermes-Yachiyo.app` 放入 `/Applications` 后打开。应用会进入安装引导，并按当前本机状态给出下一步：
 
-1. 将 `Hermes-Yachiyo.app` 放入 `/Applications`。
-2. 打开应用。
-3. 首次启动会进入安装引导。
-4. 点击“安装 Hermes Agent”，等待安装任务完成。
-5. 安装完成后，点击“重新检测”或继续进入模型配置。
+```text
+未安装 Hermes Agent
+  -> 准备 macOS 基础工具
+  -> 一键安装或重新检测 Hermes Agent
+  -> 配置模型
+  -> 初始化 Yachiyo 工作空间
+  -> 进入主控台
+```
 
-![首次启动安装页](/images/hermes-yachiyo/first-run/01-installer-first-launch.png)
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/01-installer-workspace-init-required.png" alt="首次启动安装页" />
+  <figcaption>安装引导会根据 Hermes 与工作空间状态显示操作按钮。</figcaption>
+</figure>
 
-安装过程中会显示实时进度。
+如果 Hermes Agent 尚未安装，请优先点击应用内的安装按钮完成一键安装。如果缺少 Git、Python 或命令行工具，先点击“准备 macOS 基础工具”，按终端提示完成后再回到应用。安装完成后如果页面没有自动进入下一步，点击“重新检测”或重启应用。
 
-![安装运行中](/images/hermes-yachiyo/first-run/02-installer-install-running.png)
+## 3. 配置 Hermes 模型
 
-如果安装阶段出现 `RPC failed`、`curl 18`、`early EOF` 或 `invalid index-pack output`，通常是 GitHub 克隆中断。可以重试，切换网络或代理后再安装。也可以手动安装 Hermes Agent，再回到应用点击“重新检测”。
+在“模型配置向导”填写：
 
-![安装失败示例](/images/hermes-yachiyo/first-run/03-installer-install-result.png)
+- Provider。
+- 模型名。
+- Base URL。
+- API Key 或对应外部授权方式。
 
-当应用检测到 Hermes Agent 后，会显示 Hermes 版本、命令路径、工作空间状态和模型配置表单。
+点击“保存并测试连接”。测试通过后，再初始化工作空间。以后如果更换 Provider、模型或 Base URL，也应重新测试。
 
-![检测到 Hermes Agent](/images/hermes-yachiyo/first-run/04-installer-detected-hermes.png)
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/06-dashboard-after-text-chat.png" alt="模型连接后的主控台" />
+  <figcaption>连接测试通过后，即可发送第一条文本消息。</figcaption>
+</figure>
 
-## 3. 配置模型
-
-在“模型配置向导”填写 Provider、模型、Base URL 和 API Key。
-
-实测配置：
-
-- Provider：`Xiaomi MiMo`
-- 模型：`mimo-v2.5-pro`
-- Base URL：`https://token-plan-cn.xiaomimimo.com/v1`
-- API Key：填写自己的密钥
-
-API Key 输入框会以密码形式显示，截图中不会显示明文。
-
-![模型配置填写完成](/images/hermes-yachiyo/first-run/05-model-config-filled.png)
-
-点击“保存并测试连接”。测试过程中按钮会进入运行状态。
-
-![模型连接测试中](/images/hermes-yachiyo/first-run/06-model-config-testing.png)
-
-通过后页面会显示连接已验证。
-
-![模型连接通过](/images/hermes-yachiyo/first-run/07-model-config-verified.png)
+基础 ready 状态只说明 Hermes 命令、setup 和 Yachiyo 工作空间通过检查；模型是否真正可用，以连接测试结果为准。
 
 ## 4. 初始化工作空间
 
-模型配置通过后点击“初始化工作空间”。应用会创建：
+默认工作空间路径：
 
 ```text
 ~/.hermes/yachiyo/
 ```
 
-这里会保存聊天数据库、导入资源、附件缓存、日志、备份相关数据和 Yachiyo 工作空间配置。
+这里会保存聊天数据库、导入资源、附件缓存、日志、备份相关数据和工作空间配置。初始化完成后进入主控台。
 
-![工作空间初始化完成](/images/hermes-yachiyo/first-run/08-workspace-initialized-dashboard.png)
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/04-dashboard-ready.png" alt="主控台就绪" />
+  <figcaption>主控台会展示 Hermes、Workspace、Bridge、任务和会话状态。</figcaption>
+</figure>
 
-初始化后会进入主控台。
+## 5. 主控台
 
-![主控台就绪](/images/hermes-yachiyo/first-run/09-dashboard-ready.png)
+主控台是日常管理面板。常用入口包括：
 
-## 5. 图片链路测试
-
-如果要使用图片附件，需要在主控台点击“保存并测试图片链路”。对于 Xiaomi MiMo，Yachiyo 会使用 vision 预分析图片，再把文本结果交给主模型。
-
-![图片链路测试中](/images/hermes-yachiyo/first-run/10-image-chain-testing.png)
-
-测试通过后会显示图片链路可用。实测返回结果正确识别测试色块。
-
-![图片链路测试通过](/images/hermes-yachiyo/first-run/11-image-chain-verified.png)
+- 打开对话：进入完整 Chat Window。
+- 打开表现态：启动当前桌面入口，默认为 Bubble。
+- 配置表现态：打开 Bubble 或 Live2D 设置。
+- Hermes 配置中心：保存并测试模型、图片链路、主动关怀和 TTS。
+- 工具中心：查看 Hermes tools、配置外部 Provider、运行工具测试。
+- 应用设置：Bridge、备份、恢复、卸载和应用选项。
 
 ## 6. 对话窗口
 
-点击“打开对话”进入完整 Chat Window。
+Chat Window 是完整对话空间。它支持文字、图片附件、粘贴图片、新建会话、加载历史会话、删除会话、停止处理中任务、Markdown 回复和复制回复。
 
-支持：
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/11-chat-window-live2d-session.png" alt="文字回复完成" />
+  <figcaption>Chat Window 的消息状态会同步给 Bubble 和 Live2D。</figcaption>
+</figure>
 
-- 文字对话。
-- 新建或删除对话。
-- 停止正在处理的任务。
-- 图片附件。
-- 粘贴图片。
-- 查看历史会话。
+如果要发送图片，先在主控台保存并测试图片链路。主模型支持图片时会直接处理；主模型只支持文本时，可以配置单独 vision 模型进行预分析。图片链路没有测试通过前，不建议把图片输入作为核心流程依赖。
 
-![空对话窗口](/images/hermes-yachiyo/first-run/12-chat-window-empty.png)
+## 7. Bubble 模式
 
-输入文字后点击发送。
+Bubble 是轻量桌面入口，适合常驻屏幕边缘。它可以显示摘要、未读、处理中、失败状态和最近回复。点击 Bubble 会打开 Chat Window；快捷消息也会写入当前会话。
 
-![输入文字消息](/images/hermes-yachiyo/first-run/13-chat-text-composed.png)
+可配置项包括：
 
-发送过程中会显示处理中状态。
+- 宽高、透明度和位置。
+- 常驻置顶、边缘吸附、启动展开。
+- 默认展示内容和摘要条数。
+- 头像路径。
+- 主动桌面观察和 TTS 设置。
 
-![文字发送中](/images/hermes-yachiyo/first-run/14-chat-text-sending.png)
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/05-bubble-ready.png" alt="Bubble 窗口" />
+  <figcaption>Bubble 是桌面入口，不会替代完整对话窗口。</figcaption>
+</figure>
 
-模型返回后消息进入完成状态。
+## 8. Live2D 模式
 
-![文字回复完成](/images/hermes-yachiyo/first-run/15-chat-text-replied.png)
+Live2D 是角色桌面入口。首次使用需要导入 Live2D ZIP 或选择有效模型目录。有效目录通常包含 `.model3.json` 或 `.moc3` 文件。
 
-图片附件可以通过附件按钮添加。建议使用正常尺寸图片，避免 1x1 之类极小图片被上游多模态服务判定为无法处理。
+默认资源目录：
 
-![图片已附加](/images/hermes-yachiyo/first-run/16-chat-image-attached.png)
+```text
+~/.hermes/yachiyo/assets/live2d/
+```
 
-发送图片后，Yachiyo 会先进行视觉预分析。
+Live2D 设置页支持导入资源包、选择模型目录、打开导入目录和打开 GitHub Releases。没有有效资源时，应用会引导你先配置资源，不会直接打开不可操作的透明窗口。
 
-![图片发送中](/images/hermes-yachiyo/first-run/17-chat-image-sending.png)
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/08-live2d-ready-cropped.png" alt="Live2D 渲染完成" />
+  <figcaption>资源就绪后，Live2D 可以作为桌面角色入口使用。</figcaption>
+</figure>
 
-实测标准 PNG 色块图能被正确描述。
+Live2D 可配置窗口尺寸、位置、缩放、置顶、回复气泡、快捷输入、点击行为、鼠标跟随、动作、表情、物理和主动观察。
 
-![图片回复完成](/images/hermes-yachiyo/first-run/18-chat-image-replied.png)
+## 9. 主动关怀
 
-## 7. 应用设置
+主动关怀会在你启用后按间隔观察桌面截图，通过视觉模型判断是否需要提醒，并把短消息显示到 Bubble 或 Live2D。
 
-应用设置包含通用配置、备份策略、Bubble、Live2D、Bridge、用户称呼和人格提示词。
+使用条件：
 
-![通用设置](/images/hermes-yachiyo/first-run/19-settings-general.png)
+- Hermes 模型连接可用。
+- 图片链路可用。
+- 主动桌面观察已开启。
+- macOS 屏幕录制权限已授予。
+- 触发概率和观察间隔设置合理。
 
-部分设置即时生效；涉及 Bridge 端口、应用启动行为、表现态窗口大小的设置会提示需要重启 Bridge、重启表现态或重启应用。
+如果权限不足，应用会打开系统隐私设置并保持主动关怀关闭。授权后回到应用重新开启。
 
-## 8. Bubble 模式
+## 10. 主动关怀语音
 
-Bubble 是轻量悬浮入口。它可以显示摘要、未读状态、处理中状态和最近回复，点击后可打开完整对话窗口。
+主动关怀语音支持三类 Provider：
 
-Bubble 设置支持：
+- `none`：关闭语音，只显示文本提醒。
+- `GPT-SoVITS 本地服务`：使用本机 GPT-SoVITS API。
+- `HTTP POST` 或 `本地命令`：接入你自己的 TTS 服务或脚本。
 
-- 宽高。
-- 透明度。
-- 常驻置顶。
-- 边缘吸附。
-- 默认显示内容。
-- 摘要条数。
-- 头像。
-- 主动关怀开关。
+使用 GPT-SoVITS 时，需要两部分：
 
-![Bubble 设置](/images/hermes-yachiyo/first-run/20-settings-bubble.png)
+- 八千代语音包 ZIP：包含 GPT 权重、SoVITS 权重和参考音频。
+- GPT-SoVITS 本地服务：默认 API 地址为 `http://127.0.0.1:9880`。
 
-保存后会显示设置已同步。
+语音页提供导入语音包、下载资源、部署本地依赖、打开调试终端、启动本地后台/自启、停止本地后台和刷新状态等入口。
 
-![Bubble 设置保存](/images/hermes-yachiyo/first-run/21-settings-bubble-saved.png)
+手动 TTS 测试通过后，再启用主动关怀语音。建议先用短中文句子测试，再逐步尝试中英混排或更长文本。
 
-打开 Bubble 表现态后会出现小窗。
+## 11. 工具中心
 
-![Bubble 窗口](/images/hermes-yachiyo/first-run/26-bubble-window-ready.png)
+工具中心展示 Hermes 当前暴露的 toolsets，并按实际状态显示可用、受限或待配置。常见需要额外配置的能力包括网页读取、Browser CDP、图片生成、Home Assistant、Discord、MoA 和 RL。
 
-通过 Bubble 快捷消息发送内容后，回复会进入同一个对话系统并更新气泡状态。
+工具配置页只显示变量名和配置状态，不显示密钥明文。保存后可以运行静态检查和 `hermes doctor` 对应工具状态。
 
-![Bubble 快捷消息回复](/images/hermes-yachiyo/first-run/27-bubble-quick-message-replied.png)
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/12-tool-center-overview.png" alt="工具中心概览" />
+  <figcaption>工具受限不代表主对话不可用，只影响对应工具能力。</figcaption>
+</figure>
 
-## 9. Live2D 模式
+## 12. 诊断与更新
 
-Live2D 是角色桌面入口。首次使用需要导入 Live2D ZIP。
+诊断页支持受控运行：
 
-导入步骤：
+```text
+hermes config check
+hermes doctor
+hermes auth list
+```
 
-1. 打开“应用设置”。
-2. 选择 Live2D 设置。
-3. 点击“导入资源包 ZIP”。
-4. 选择 Live2D 资源包。
-5. 等待资源识别完成。
-6. 保存设置。
-7. 重新打开 Live2D 表现态。
+`hermes doctor` 会检查命令安装、依赖、模型配置和工具状态。工具中心还可以检查 Hermes 更新；更新完成后会刷新 tools list、Doctor 缓存和 Provider 列表。
 
-导入前页面会提示资源未配置。
+## 13. 备份、恢复与卸载
 
-![Live2D 导入前](/images/hermes-yachiyo/first-run/22-settings-live2d-before-import.png)
-
-导入成功后，设置页会显示资源已就绪、有效模型路径、表达式和模型信息。
-
-![Live2D 导入成功](/images/hermes-yachiyo/first-run/23-settings-live2d-imported.png)
-
-保存详细设置后可启用回复气泡、快捷输入、鼠标跟随、表达式和物理。
-
-![Live2D 设置保存](/images/hermes-yachiyo/first-run/24-settings-live2d-saved.png)
-
-打开 Live2D 表现态后应能看到角色画布。实测画布非空，模型、表情和本地资源路径均被正确加载。
-
-![Live2D 渲染完成](/images/hermes-yachiyo/first-run/25-live2d-window-rendered.png)
-
-主动关怀触发后，Live2D 窗口会展示关怀消息。
-
-![Live2D 主动关怀](/images/hermes-yachiyo/first-run/34-proactive-live2d-attention.png)
-
-## 10. 主动关怀
-
-主动关怀会按间隔读取桌面截图，通过视觉模型判断是否需要提醒用户，然后生成适合桌面入口展示的消息。
-
-使用步骤：
-
-1. 在主控台或表现态设置中启用主动桌面观察。
-2. 设置观察间隔，最低为 300 秒。
-3. 设置触发概率。
-4. 如果需要语音，先配置主动关怀语音。
-5. 保存后可点击测试触发。
-
-macOS 可能会要求屏幕录制权限。请到“系统设置 -> 隐私与安全性 -> 屏幕录制”允许 Hermes-Yachiyo。
-
-![完整配置后主控台](/images/hermes-yachiyo/first-run/32-dashboard-after-full-config.png)
-
-## 11. 主动关怀语音
-
-打开“主动关怀语音”页面后，可以选择：
-
-- 不启用语音。
-- HTTP TTS。
-- 本地命令 TTS。
-- GPT-SoVITS 本地服务。
-
-八千代 GPT-SoVITS 语音包导入步骤：
-
-1. 选择 `GPT-SoVITS 本地服务`。
-2. 点击“导入语音包 ZIP”。
-3. 选择语音包 ZIP。
-4. 确认 GPT 权重、SoVITS 权重、参考音频路径已自动填入。
-5. 保存设置。
-6. 点击测试语音。
-
-![TTS 导入前](/images/hermes-yachiyo/first-run/28-tts-settings-before-import.png)
-
-导入成功后，页面会自动填入权重、参考音频、语言、切分方式和 API 地址。
-
-![TTS 导入并保存](/images/hermes-yachiyo/first-run/29-tts-settings-imported-saved.png)
-
-点击测试后会显示运行状态。
-
-![TTS 测试中](/images/hermes-yachiyo/first-run/30-tts-test-running.png)
-
-测试成功后会显示 `TTS 测试已完成`。首次加载权重可能较慢，建议给第一次测试留出更长等待时间。
-
-![TTS 测试成功](/images/hermes-yachiyo/first-run/31-tts-test-success.png)
-
-主动关怀语音配置完成后可在该页复查开关、触发概率和 GPT-SoVITS 状态。
-
-![主动关怀语音配置](/images/hermes-yachiyo/first-run/33-proactive-tts-enabled.png)
-
-## 12. 工具中心
-
-工具中心用于查看 Hermes 工具组和外部工具配置状态。
-
-常见状态：
-
-- `available`：工具已可用。
-- `limited`：工具存在但缺少依赖或 API Key。
-- `missing API Key`：需要在工具中心填写对应密钥。
-- `system dependency not met`：需要安装浏览器、CDP、外部服务或系统依赖。
-
-![工具中心概览](/images/hermes-yachiyo/first-run/35-tools-overview.png)
-
-Web 工具需要 Firecrawl、Exa、Parallel 或 Tavily 等外部配置。未配置时测试会清楚列出缺失项。
-
-![Web 工具测试](/images/hermes-yachiyo/first-run/36-tools-web-test-result.png)
-
-Browser CDP 工具需要可连接的 Chrome CDP 端点。
-
-![Browser CDP 工具测试](/images/hermes-yachiyo/first-run/37-tools-browser-cdp-test-result.png)
-
-Image Generation 工具需要对应图片服务 Key。实测默认 FAL 配置在未填 Key 时会失败并提示缺失字段。
-
-![Image Gen 工具测试](/images/hermes-yachiyo/first-run/38-tools-image-gen-test-result.png)
-
-工具中心也提供 Hermes 更新检查入口。
-
-![Hermes 更新检查](/images/hermes-yachiyo/first-run/39-tools-update-check.png)
-
-## 13. 诊断
-
-诊断页可以直接运行受控命令，包括：
-
-- `hermes config check`
-- `hermes doctor`
-- `hermes auth list`
-
-配置检查会列出必需与可选配置项。
-
-![配置检查](/images/hermes-yachiyo/first-run/40-diagnostics-config-check.png)
-
-Doctor 会检查 Python、依赖、目录结构、命令安装和外部工具。
-
-![Hermes Doctor](/images/hermes-yachiyo/first-run/41-diagnostics-doctor.png)
-
-## 14. 备份与恢复
-
-应用维护页可以立即生成备份。备份默认保存在：
+备份默认目录：
 
 ```text
 ~/Hermes-Yachiyo-backups/
 ```
 
-备份包含：
+备份包含应用配置、Yachiyo 工作空间、聊天数据库、导入资源、附件缓存和日志。资源越大，备份越大。
 
-- Yachiyo 应用配置。
-- Yachiyo 工作空间。
-- 聊天数据库。
-- 导入资源。
-- 附件缓存和日志。
+卸载页会先生成预览清单，并要求输入确认短语 `UNINSTALL`。可选择仅删除 Yachiyo 数据、保留配置、同时删除 Hermes Agent 数据、同时处理 GPT-SoVITS 本地服务，或尝试删除当前 `.app` 本体。
 
-实测在导入 Live2D 与 GPT-SoVITS 资源后，完整备份大小为 `465.3 MB`。
+## 14. 数据与隐私边界
 
-![备份生成后](/images/hermes-yachiyo/first-run/42-settings-general-backup-created.png)
+Hermes-Yachiyo 默认以本机为边界：
 
-恢复备份会把备份内容导回本地配置和工作空间。恢复前建议先确认当前数据是否需要另存。
+- Bridge 默认只监听 `127.0.0.1`。
+- 工作空间、聊天数据库、资源和备份保存在用户目录。
+- API Key 不在工具配置页明文回传。
+- Live2D 和语音资源按需导入，不随主应用仓库分发。
+- 图片、截图和语音请求会按你配置的模型或本地服务处理。
 
-## 15. 卸载
+如果你启用了在线模型、网页工具、图片生成或外部 TTS，请按对应服务商的隐私政策理解数据流向。
 
-卸载页会先生成可删除清单，并要求输入确认短语 `UNINSTALL`。测试中只验证了预览清单，没有执行真实卸载。
+## 15. 推荐完整流程
 
-支持的范围包括：
+1. 打开应用并安装或检测 Hermes Agent。
+2. 填写模型配置，保存并测试连接。
+3. 初始化 `~/.hermes/yachiyo/` 工作空间。
+4. 打开 Chat Window，发送第一条文本消息。
+5. 如需图片输入，先配置并测试图片链路，再发送一张截图。
+6. 打开 Bubble，确认快捷消息进入同一会话。
+7. 导入 Live2D 资源，打开 Live2D 角色入口。
+8. 按需开启主动关怀并授予屏幕录制权限。
+9. 按需导入 GPT-SoVITS 语音包并启动本地服务。
+10. 打开工具中心，只配置你需要的工具。
+11. 创建一次备份，确认备份目录和恢复入口。
 
-- 仅删除 Hermes-Yachiyo 配置和工作空间。
-- 是否保留配置快照。
-- 是否同时卸载 GPT-SoVITS LaunchAgent。
-
-![卸载预览](/images/hermes-yachiyo/first-run/43-settings-uninstall-preview.png)
-
-## 16. 常见问题
-
-### Hermes Agent 安装失败
-
-如果看到 `RPC failed`、`early EOF`、`invalid index-pack output`，通常是 GitHub 网络传输中断。请重试、切换网络或代理，或手动安装 Hermes Agent 后回到应用点击“重新检测”。
-
-### 模型连接失败
-
-检查 Provider、模型、Base URL 和 API Key。保存配置后重新点击“保存并测试连接”。
-
-### 图片不可用
-
-先点击“保存并测试图片链路”。请避免使用极小图片，建议使用正常尺寸截图或图片。
-
-### Live2D 没有显示角色
-
-确认资源包已导入，并且设置页显示 `资源已就绪`。保存模型路径后需要重新打开 Live2D 表现态。
-
-### TTS 没声音
-
-确认语音 Provider 已启用。GPT-SoVITS 语音包导入成功只代表音色路径就绪，还需要本地 API 服务可达。首次加载权重可能需要几十秒。
-
-如果 GPT-SoVITS 返回 HTTP 400，请检查参考音频路径、文本语言、参考音频语言、切分方式、媒体类型，以及本地 GPT-SoVITS API 版本是否与 Hermes-Yachiyo 的请求格式兼容。
-
-### 主动关怀不触发
-
-确认主动桌面观察已开启，触发概率不是 0，macOS 屏幕录制权限已授权，并等待至少一个观察间隔。
+遇到问题时，请先查看 [排障](/guide/troubleshooting)。

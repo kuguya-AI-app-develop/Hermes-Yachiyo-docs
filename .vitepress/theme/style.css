@@ -45,7 +45,7 @@
   align-items: end;
   background:
     linear-gradient(90deg, rgba(6, 11, 19, 0.88) 0%, rgba(6, 11, 19, 0.72) 40%, rgba(6, 11, 19, 0.22) 100%),
-    url('/images/hermes-yachiyo/first-run/32-dashboard-after-full-config.png') center / cover no-repeat;
+    url('/images/hermes-yachiyo/current-flow/07-dashboard-live2d-mode.png') center / cover no-repeat;
   border-bottom: 1px solid var(--portal-line);
 }
 

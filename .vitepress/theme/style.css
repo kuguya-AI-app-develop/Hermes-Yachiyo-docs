@@ -109,6 +109,47 @@
   background: rgba(15, 23, 42, 0.54);
 }
 
+.portal-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  max-width: 720px;
+  margin-top: 18px;
+}
+
+.portal-download {
+  display: grid;
+  gap: 4px;
+  min-width: 220px;
+  min-height: 72px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.portal-download.primary {
+  border-color: #fbbf24;
+  color: #111827;
+  background: #f59e0b;
+  box-shadow: 0 16px 34px rgba(245, 158, 11, 0.24);
+}
+
+.portal-download span {
+  font-size: 18px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.portal-download small {
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  opacity: 0.82;
+}
+
 .portal-proof {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

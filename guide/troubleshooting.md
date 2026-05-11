@@ -15,6 +15,14 @@ invalid index-pack output
 
 通常是 GitHub 网络传输中断。可以切换网络或代理后重试。正常情况下请优先使用 Hermes-Yachiyo 安装引导内的一键安装；确实需要手动安装时，再从 Hermes Agent Releases 准备 Hermes 后回到 Yachiyo 点击“重新检测”。
 
+## macOS 提示无法验证应用
+
+当前发布包暂未使用 Apple Developer ID 签名和公证，第一次打开时 macOS 可能提示“Apple 无法验证 Hermes-Yachiyo”并提供“完成”或“移到废纸篓”等按钮。
+
+如果你确认应用来自本站首页或 [安装页](/guide/install) 的 GitHub Releases 固定下载链接，先点击“完成”关闭提示，不要选择“移到废纸篓”。然后打开“系统设置 -> 隐私与安全性”，在“安全性”区域找到 Hermes-Yachiyo 被拦截的提示，点击“仍要打开”，再在确认弹窗中选择“打开”或“仍要打开”。
+
+如果系统设置中没有出现“仍要打开”，回到 `/Applications`，按住 Control 点击 `Hermes-Yachiyo.app` 并选择“打开”，再按系统提示继续。
+
 ## 找不到 hermes 命令
 
 确认 Hermes Agent 已安装，并且当前 GUI 应用进程能读取到 `hermes` 所在 PATH。安装完成后如果终端能找到命令但应用找不到，退出并重新打开 Hermes-Yachiyo，然后点击“重新检测”。

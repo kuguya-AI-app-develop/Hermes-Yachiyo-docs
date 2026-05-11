@@ -11,7 +11,7 @@ Hermes-Yachiyo 是桌面优先的本地个人 Agent 应用。它把 Hermes Agent
 - Bubble：轻量桌面悬浮入口，可显示未读、处理中、摘要和快捷消息。
 - Live2D：角色桌面入口，可加载 Live2D 资源、显示回复气泡和主动关怀。
 - 主动关怀：在授权后按间隔观察桌面，并把提醒显示到 Bubble 或 Live2D。
-- 资源与维护：导入 Live2D/GPT-SoVITS 资源，运行 Doctor，创建备份并预览卸载范围。
+- 资源与维护：导入 Live2D/GPT-SoVITS 资源，检查应用更新，运行 Doctor，创建备份并预览卸载范围。
 
 ## 推荐阅读顺序
 
@@ -19,7 +19,7 @@ Hermes-Yachiyo 是桌面优先的本地个人 Agent 应用。它把 Hermes Agent
 2. [模型、图片与对话](/guide/model-chat)：设置 Provider、Base URL、API Key，验证文本与图片链路，并开始聊天。
 3. [桌面入口与主动关怀](/guide/desktop-modes)：理解主控台、Chat Window、Bubble、Live2D 和主动桌面观察。
 4. [Live2D 与语音资源](/guide/assets)：导入 Live2D 模型、八千代 GPT-SoVITS 语音包并检查本地 TTS 服务。
-5. [工具、诊断与维护](/guide/tools-maintenance)：查看工具中心、运行 Doctor、更新 Hermes、备份恢复和卸载预览。
+5. [工具、诊断与维护](/guide/tools-maintenance)：查看工具中心、检查应用更新、运行 Doctor、备份恢复和卸载预览。
 6. [排障](/guide/troubleshooting)：处理安装、模型、图片、权限、Live2D、TTS 和工具受限问题。
 
 ## 准备材料
@@ -43,4 +43,4 @@ Hermes-Yachiyo 是桌面优先的本地个人 Agent 应用。它把 Hermes Agent
 - 如果使用 Live2D，资源已导入，角色窗口能正常显示。
 - 如果启用主动关怀，macOS 屏幕录制权限已授予，触发概率和间隔设置合理。
 - 如果启用语音，TTS Provider、语音资源和本地服务状态已经确认。
-- 备份策略、诊断入口和卸载范围已经了解。
+- 应用更新、备份策略、诊断入口和卸载范围已经了解。

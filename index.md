@@ -14,6 +14,16 @@ outline: false
         <a class="portal-action" href="/guide/">开始完整体验</a>
         <a class="portal-action secondary" href="/user-manual">阅读使用手册</a>
       </div>
+      <div class="portal-downloads" aria-label="下载 Hermes-Yachiyo">
+        <a class="portal-download primary" href="https://github.com/kuguya-AI-app-develop/Hermes-Yachiyo/releases/download/main-latest/Hermes-Yachiyo-main-latest.dmg" target="_blank" rel="noreferrer">
+          <span>下载正式版</span>
+          <small>main-latest · macOS DMG</small>
+        </a>
+        <a class="portal-download" href="https://github.com/kuguya-AI-app-develop/Hermes-Yachiyo/releases/download/develop-latest/Hermes-Yachiyo-develop-latest.dmg" target="_blank" rel="noreferrer">
+          <span>下载实验版</span>
+          <small>develop-latest · macOS DMG</small>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -76,7 +86,7 @@ outline: false
           <a href="/guide/install"><strong>安装与首启</strong><span>应用内一键安装、模型连接测试和工作空间初始化。</span></a>
           <a href="/guide/model-chat"><strong>对话与图片</strong><span>完整对话窗口、图片附件、任务停止和共享会话状态。</span></a>
           <a href="/guide/assets"><strong>资源导入</strong><span>Live2D ZIP、八千代 GPT-SoVITS 语音包和本地服务。</span></a>
-          <a href="/guide/tools-maintenance"><strong>维护与诊断</strong><span>工具中心、Hermes Doctor、备份、恢复和卸载预览。</span></a>
+          <a href="/guide/tools-maintenance"><strong>维护与诊断</strong><span>工具中心、应用更新、Hermes Doctor、备份、恢复和卸载预览。</span></a>
         </div>
       </div>
       <img src="/images/hermes-yachiyo/current-flow/12-tool-center-overview.png" alt="Hermes-Yachiyo 工具中心" />

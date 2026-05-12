@@ -45,7 +45,7 @@
   align-items: end;
   background:
     linear-gradient(90deg, rgba(6, 11, 19, 0.88) 0%, rgba(6, 11, 19, 0.72) 40%, rgba(6, 11, 19, 0.22) 100%),
-    url('/images/hermes-yachiyo/current-flow/07-dashboard-live2d-mode.png') center / cover no-repeat;
+    url('/images/hermes-yachiyo/current-flow/05-dashboard-ready.png') center / cover no-repeat;
   border-bottom: 1px solid var(--portal-line);
 }
 
@@ -288,6 +288,15 @@
 .guide-shot img {
   display: block;
   width: 100%;
+}
+
+.guide-shot.compact-shot {
+  max-width: 520px;
+}
+
+.guide-shot.compact-shot img {
+  background: #05080f;
+  object-fit: contain;
 }
 
 .guide-shot figcaption {

@@ -1,85 +1,90 @@
 # 安装与首启
 
-本页说明 macOS 发布包的第一次打开流程。Hermes-Yachiyo 已经把 Hermes Agent 的准备流程放进应用内，请优先使用安装引导的一键安装与检测能力；源码开发启动方式请以项目 README 为准。
+本页说明 macOS 发布包的第一次打开流程。新版 Hermes-Yachiyo 已经把 Hermes Agent 准备流程放进应用内，请优先使用安装器的一键安装，不需要从文档里手动复制安装命令。
 
 ## 1. 下载发布包
 
-首页已经提供两个固定下载入口：
+首页提供两个固定下载入口：
 
 - [下载正式版](https://github.com/kuguya-AI-app-develop/Hermes-Yachiyo/releases/download/main-latest/Hermes-Yachiyo-main-latest.dmg)：适合日常使用，对应 `main-latest`。
 - [下载实验版](https://github.com/kuguya-AI-app-develop/Hermes-Yachiyo/releases/download/develop-latest/Hermes-Yachiyo-develop-latest.dmg)：适合提前验证新功能，对应 `develop-latest`。
 
 下载 DMG 后打开安装包，将 `Hermes-Yachiyo.app` 放入 `/Applications`。
 
-## 2. 打开应用
+## 2. 处理 macOS 未验证提示
 
-将 `Hermes-Yachiyo.app` 放入 `/Applications` 后打开。应用会先检查本机是否能找到 Hermes Agent、Hermes 是否完成 setup，以及 Yachiyo 工作空间是否已经初始化。
+当前发布包可能还没有 Apple Developer ID 签名和公证。第一次打开时，macOS 可能提示无法验证应用。
 
-<figure class="guide-shot">
-  <img src="/images/hermes-yachiyo/current-flow/01-installer-workspace-init-required.png" alt="首次启动安装页" />
-  <figcaption>首次打开时，安装引导会根据当前状态给出下一步操作。</figcaption>
-</figure>
+如果你确认 DMG 来自本站或 GitHub Releases 固定下载链接，可以这样继续：
 
-## 3. 处理 macOS 未验证提示
-
-当前发布包暂未使用 Apple Developer ID 签名和公证。第一次打开时，macOS 可能提示“未打开 Hermes-Yachiyo”或“Apple 无法验证 Hermes-Yachiyo 是否包含可能危害 Mac 安全或泄漏隐私的恶意软件”。这是 Gatekeeper 对未签名应用的保护提示。
-
-如果你确认 DMG 来自本页或首页的 GitHub Releases 固定下载链接，可以按下面方式继续打开：
-
-1. 在提示框中点击“完成”关闭提示，不要选择“移到废纸篓”。
+1. 在提示框中点击“完成”，不要选择“移到废纸篓”。
 2. 打开“系统设置 -> 隐私与安全性”。
 3. 在“安全性”区域找到 Hermes-Yachiyo 被拦截的提示，点击“仍要打开”。
-4. 回到确认弹窗后，再选择“打开”或“仍要打开”。
+4. 回到确认弹窗后选择“打开”或“仍要打开”。
 
-完成后，同一个应用通常不需要重复授权。如果系统设置里没有出现“仍要打开”，回到 `/Applications`，按住 Control 点击 `Hermes-Yachiyo.app` 并选择“打开”，再按系统提示继续。
+如果系统设置里没有出现“仍要打开”，回到 `/Applications`，按住 Control 点击 `Hermes-Yachiyo.app` 并选择“打开”。
 
-## 4. 准备 macOS 基础工具
+## 3. 进入安装器
 
-如果系统缺少 Git、Python、命令行工具或必要 shell 环境，先点击“准备 macOS 基础工具”。应用会打开受控终端，按提示完成后回到安装引导并点击“重新检测”。
-
-这一步只准备基础环境，不会替你填写模型密钥。
-
-## 5. 一键安装或检测 Hermes Agent
-
-如果 Hermes Agent 未安装，点击安装引导中的“安装 Hermes Agent”。安装页会显示实时输出，并把 Hermes 安装到当前用户环境。安装完成后，点击“重新检测”确认 Hermes 命令可用。
+第一次打开后，应用会检查 Hermes Agent、模型配置和 Yachiyo 工作区状态。安装器会用分步状态告诉你下一步该做什么。
 
 <figure class="guide-shot">
-  <img src="/images/hermes-yachiyo/current-flow/03-installer-ready.png" alt="检测到 Hermes Agent" />
-  <figcaption>检测成功后，页面会显示 Hermes 版本、命令路径、工作空间状态和模型配置入口。</figcaption>
+  <img src="/images/hermes-yachiyo/current-flow/01-installer-start.png" alt="Hermes-Yachiyo 安装器初始状态" />
+  <figcaption>未安装 Hermes Agent 时，安装器会把“一键安装”作为第一步。</figcaption>
 </figure>
 
-如果你已经手动安装过 Hermes Agent，也可以直接点击“重新检测”。只要当前应用进程能读到 `hermes` 命令，就会进入下一步。安装完成后如果页面仍停留在旧状态，先点击“重新检测”；仍未刷新时退出并重新打开应用。
+## 4. 一键安装 Hermes Agent
 
-## 6. 配置模型
+点击“安装 Hermes Agent”。安装器会在应用内运行受控终端，自动准备用户目录下的运行环境。一次完整安装可能包括：
 
-在“模型配置向导”填写 Provider、模型、Base URL 和 API Key，然后点击“保存并测试连接”。测试通过后，Yachiyo 会把连接状态记录下来；如果以后修改 Provider、模型或 Base URL，需要重新测试。
+- 检查 macOS、Git、uv、Python、Node.js 等基础工具。
+- 在 `~/.hermes` 下准备托管 runtime。
+- 自动安装 Python 3.11 与 Node.js 22。
+- 克隆并安装 Hermes Agent。
+- 安装前端依赖和 Playwright 相关组件。
 
-部分 Provider 使用外部授权，不一定需要在此处填写 API Key。若使用 OpenAI-compatible 中转服务，请确认 Base URL 以服务商要求的 `/v1` 地址结尾。密钥只填写在本机应用中，不要写进文档、截图或聊天记录。
+<figure class="guide-shot">
+  <img src="/images/hermes-yachiyo/current-flow/02-installer-installing.png" alt="Hermes-Yachiyo 正在安装 Hermes Agent" />
+  <figcaption>安装输出会实时显示，网络传输失败时安装器会自动重试。</figcaption>
+</figure>
 
-## 7. 初始化工作空间
+安装过程中，如果 GitHub clone 出现 `RPC failed`、`early EOF` 或 `invalid index-pack`，通常是网络传输中断。安装器会先自动重试；多次失败后再切换网络或代理重新点击安装。
 
-模型配置通过后点击“初始化工作空间”。默认工作空间为：
+如果提示缺少 `ripgrep` 或 `ffmpeg`，基础对话不受影响。需要相关能力时再手动安装，例如：
+
+```sh
+brew install ripgrep ffmpeg
+```
+
+## 5. 配置模型
+
+安装完成后进入“模型配置”。填写 Provider、模型、Base URL 和 API Key。使用 OpenAI-compatible 中转服务时，Base URL 通常需要以 `/v1` 结尾。
+
+密钥只填写在本机应用里，不要写进文档、截图或聊天记录。保存后点击连接测试，只有测试通过才代表桌面对话链路可用。
+
+## 6. 初始化工作区
+
+连接测试通过后，点击“初始化工作区”。默认路径是：
 
 ```text
 ~/.hermes/yachiyo/
 ```
 
-这里会保存聊天数据库、导入资源、附件缓存、日志、备份相关数据和工作空间配置。
+这里会保存聊天数据库、附件缓存、导入资源、日志、工作区配置和备份相关数据。
+
+## 7. 进入主控台
+
+初始化完成后进入主控台。打包版 Bridge 默认监听：
+
+```text
+http://127.0.0.1:18420
+```
+
+开发模式可能使用 `8420`，以主控台显示为准。
 
 <figure class="guide-shot">
-  <img src="/images/hermes-yachiyo/current-flow/04-dashboard-ready.png" alt="主控台就绪" />
-  <figcaption>初始化完成后进入主控台，Bridge 应显示为 running。</figcaption>
+  <img src="/images/hermes-yachiyo/current-flow/05-dashboard-ready.png" alt="Hermes-Yachiyo 主控台就绪" />
+  <figcaption>Bridge running、模型已连接、工作区已初始化后，就可以开始日常使用。</figcaption>
 </figure>
 
-如果你还没有完整填写模型/API Key，应用会在初始化前提醒风险。可以取消并回到模型配置，也可以先初始化，之后在主控台继续补齐配置。
-
-## 8. 进入主控台
-
-主控台是日常管理入口。第一次进入后，建议按顺序确认：
-
-- Hermes 状态为已安装并初始化。
-- Workspace 已初始化并显示本机路径。
-- Bridge 为 `running`，默认监听 `127.0.0.1:8420`。
-- 点击“打开对话”发送第一条消息。
-- 需要常驻桌面入口时，点击“打开表现态”启动 Bubble 或 Live2D。
-- 准备导入资源前，先确认文本模型连接测试已经通过。
+如果安装或初始化完成后页面仍停留在旧状态，先点击“重新检测”。仍未刷新时，退出并重新打开应用即可回到最新状态。
